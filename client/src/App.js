@@ -1,36 +1,77 @@
 import './App.css';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js";
-import Navbar from './Component/Navbar.js';
+ 
 import Home from './Component/Home.js';
 import Register from './Component/Register.js';
 import Edit from './Component/Edit.js';
 import Details from './Component/Details.js';
-// import{ BrowserRouter as Router, Switch,Route, Link} from "react-router-dom";
+import Stattable from './Component/Stattable.js';
+
 
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
   Routes,
   Route,
   Link,
+  Outlet,
+  Navigate,
 } from "react-router-dom";
- 
+import { useState } from 'react';
+import DataProvider from './Context/DataProvider.js';
+import Login from './Component/Login.js';
+  
+
+const PrivateRoute = ({ isAuthenticated, ...props }) => {
+  const token = sessionStorage.getItem('accessToken');
+  return isAuthenticated && token ? 
+    <>
+    
+      <Outlet/>
+    </> : <Navigate replace to='/account' />
+};
+
+
 
 function App() {
+  const [isAuthenticated, isUserAuthenticated] = useState(false);
+
   return (
+    
+    <DataProvider>  
+    <BrowserRouter>
     <div className="App">
-      <Navbar /> 
-      <Router>
+     
       <Routes>
-        <Route exact path="/" Component={Home} />
-        <Route exact path="/register" Component={Register} />
-        <Route exact path="/edit/:id" Component={Edit} />
-        <Route exact path="/view/:id" Component={Details} />
+      <Route path='/account' element=
+      {<Login isUserAuthenticated={isUserAuthenticated} />} />
+
+        <Route path='/' element={<PrivateRoute isAuthenticated={isAuthenticated} />} >
+              <Route path='/' element={<Home />} />
+        </Route>
+
+        <Route path='/register' element={<PrivateRoute isAuthenticated={isAuthenticated} />} >
+              <Route path='/register' element={<Register />} />
+        </Route>
+
+        <Route path='/edit/:id' element={<PrivateRoute isAuthenticated={isAuthenticated} />} >
+              <Route path='/edit/:id' element={<Edit />} />
+        </Route>
+
+        <Route path='/view/:id' element={<PrivateRoute isAuthenticated={isAuthenticated} />} >
+              <Route path='/view/:id' element={<Details />} />
+        </Route>
+        <Route path='/stattable' element={<PrivateRoute isAuthenticated={isAuthenticated} />} >
+              <Route path='/stattable' element={<Stattable />} />
+        </Route>
+
+        
         </Routes>
-      </Router>
-      {/* <Home />
-      <Register /> */}
+     
     </div>
+    </BrowserRouter>
+    
+    </DataProvider>
   );
 }
 

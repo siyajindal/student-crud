@@ -16,3 +16,13 @@
 .right_view p{
   font-weight: 640;
 }
+.right_view span{
+  font-weight: 400;
+}
+
+.status{
+   text-align: center;
+   font-size: 50px;
+   text-shadow: 3px 3px 3px pink;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}

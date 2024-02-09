@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 const userSchema = new mongoose.Schema({
     roll: {
         type: Number,
@@ -17,7 +18,7 @@ const userSchema = new mongoose.Schema({
     enrol: {
         type: Date,
         required: true,
-        unique: true
+       
     },
     fees: {
         type: String,
@@ -26,7 +27,7 @@ const userSchema = new mongoose.Schema({
     mail: {
         type: String,
         required: true,
-        unique: true
+        
     },
     intro: {
         type: String,
@@ -34,7 +35,7 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-const users = new mongoose.model("users",userSchema);
+const users = new mongoose.model("Newusers",userSchema);
 
 
 module.exports = users;

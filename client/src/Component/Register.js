@@ -1,8 +1,10 @@
 import React, {  useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom';
  
 export default function Register() {
  
+    const navigate = useNavigate();
+
   const[inpval,setval]=useState({
     roll:"",
     name:"",
@@ -22,21 +24,22 @@ export default function Register() {
             [name]:value
         }
     })
-  }
+  }   
 
   const addinpdata = async (e) => {
     e.preventDefault();
 
     const { roll,name,classes,enrol,fees,mail,intro } = inpval;
-
-    const res = await fetch("/register", {
+    // const res = await fetch('https://dummyjson.com/products/1');   
+    // return res.json();
+    const res = await fetch("http://localhost:8003/register", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
             roll,name,classes,enrol,fees,mail,intro
-        })
+        })   
     });
 
     const data = await res.json();
@@ -47,10 +50,9 @@ export default function Register() {
         alert("error");
 
     } else {
-        // history.push("/")
-        // setUdata(data)
         alert("data added");
-        console.log("data added");
+        navigate("/");
+      console.log("data added");
 
      }
 }
@@ -59,7 +61,7 @@ export default function Register() {
   return (
     <div className="container">
     
-    <NavLink to='/'>Home</NavLink>
+    <button className=' btn btn-info mt-5'><Link to='/'>Home</Link></button>
     <form className="mt-4">
     <div className='container'>
         <div className="row">

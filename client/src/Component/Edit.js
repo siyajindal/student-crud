@@ -1,11 +1,10 @@
 import React, {useEffect, useState } from 'react'
-import { NavLink, useParams } from 'react-router-dom'
+import { Link, useParams,useNavigate } from 'react-router-dom'
 
 
 export default function Edit() {
  
-    // const [getuserdata, setUserdata] = useState([]);
-    //   console.log(getuserdata);
+    const navigate = useNavigate();  
 
     const[inpval,setval]=useState({
         roll:"",
@@ -35,7 +34,8 @@ export default function Edit() {
      
    
      const getdata = async () => {
-       const res = await fetch(`/getuser/${id}`, {
+       
+        const res = await fetch(`/getuser/${id}`, {
          method: "GET",
          headers: {
              "Content-Type": "application/json"
@@ -60,10 +60,37 @@ export default function Edit() {
        getdata();
       },[]);
    
+      const updateuser = async(e)=>{
+        e.preventDefault();
+
+        const {roll,name,classes,enrol,fees,mail,intro} = inpval;
+
+        const res2 = await fetch(`/updateuser/${id}`,{
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body:JSON.stringify({
+                roll,name,classes,enrol,fees,mail,intro
+            })
+        });
+
+        const data2 = await res2.json();
+        console.log(data2);
+
+        if(res2.status === 422 || !data2){
+            alert("fill the data");
+        }else{
+            navigate("/");  
+             alert("data updated");
+        } 
+
+    }
+
 
   return (
     <div className="container">
-    <NavLink to='/'>Home</NavLink>
+   <button className='mt-4 '> <Link to='/'>Home</Link> </button>
     <form className="mt-4">
     <div className='container'>
         <div className="row">
@@ -104,7 +131,7 @@ export default function Edit() {
             </div>
         </div>
         <div id="emailHelp" className="form-text mb-3">We'll never share your Data with anyone else.</div>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" onClick={updateuser} className="btn btn-primary">Submit</button>
     </div>
 </form>
 
